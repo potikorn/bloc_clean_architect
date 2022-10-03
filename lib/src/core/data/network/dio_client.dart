@@ -5,7 +5,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class EndPoints {
   EndPoints._();
 
-  static const String baseUrl = 'https://aaajsonplaceholder.typicode.com';
+  static const String baseUrl = 'https://jsonplaceholder.typicode.com';
   static const int receiveTimeout = 6000;
   static const int connectionTimeout = 6000;
   static const String posts = '/posts';
