@@ -42,6 +42,8 @@ dependencies:
   equatable: ^2.0.5
   dio: ^4.0.6
   pretty_dio_logger: ^1.2.0-beta-1
+  stream_transform: ^2.0.0
+  bloc_concurrency: ^0.2.0
 
 dev_dependencies:
   flutter_test:

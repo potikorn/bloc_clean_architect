@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:bloc_clean_architect/src/core/presentation/app.dart';
 import 'package:bloc_clean_architect/src/di/inject.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
+  Bloc.observer = SimpleBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await configureInjection();
 
@@ -16,3 +18,5 @@ Future<void> main() async {
     log(error.toString());
   });
 }
+
+class SimpleBlocObserver extends BlocObserver {}

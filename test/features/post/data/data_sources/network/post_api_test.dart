@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc_clean_architect/src/core/data/network/dio_client.dart';
+import 'package:bloc_clean_architect/src/features/post/data/data_sources/network/params/post_limit_params.dart';
 import 'package:bloc_clean_architect/src/features/post/data/data_sources/network/post_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,14 +27,17 @@ void main() {
       final rawJson = File('test/features/post/test_resources/post_list.json')
           .readAsStringSync();
 
+      final payload = PostListParams().toMap();
+
       dioAdapter.onGet(route, (server) {
         return server.reply(200, rawJson);
-      });
-      final mockResponse = await dio.get(route);
+      }, data: Matchers.any);
+      final mockResponse = await dio.get(route, queryParameters: payload);
 
-      when(() => dioClient.get(route)).thenAnswer((_) async => mockResponse);
+      when(() => dioClient.get(route, queryParameters: payload))
+          .thenAnswer((_) async => mockResponse);
 
-      final response = await postApi.getPosts();
+      final response = await postApi.getPosts(PostListParams());
       expect(response.statusCode, 200);
       expect(response.data, rawJson);
     });

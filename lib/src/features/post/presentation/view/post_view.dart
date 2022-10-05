@@ -13,35 +13,43 @@ class PostsView extends StatefulWidget {
 class _PostsViewState extends State<PostsView>
     with AutomaticKeepAliveClientMixin<PostsView> {
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return BlocConsumer<PostBloc, PostState>(
       listener: ((context, state) {
-        if (state is PostError) {
+        if (state.status == PostStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message ?? '')),
+            const SnackBar(content: Text('on Error')),
+          );
+        }
+        if (state.hasReachedMax == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No more posts')),
           );
         }
       }),
       builder: (context, state) {
-        if (state is PostInitial) {
+        if (state.status == PostStatus.initial) {
           return const Center(
             child: Text('Initial...'),
           );
-        } else if (state is PostLoading) {
+        } else if (state.status == PostStatus.loading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is PostSuccess) {
-          return SafeArea(
-            child: PostList(postListModel: state.postListModel),
+        } else if (state.status == PostStatus.success) {
+          if (state.posts.isEmpty) {
+            return const Center(child: Text('no posts'));
+          }
+          return const SafeArea(
+            child: PostList(),
           );
         }
         return Container();
       },
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

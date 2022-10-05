@@ -1,3 +1,4 @@
+import 'package:bloc_clean_architect/src/features/post/data/data_sources/network/params/post_limit_params.dart';
 import 'package:bloc_clean_architect/src/features/post/data/data_sources/network/post_api.dart';
 import 'package:bloc_clean_architect/src/features/post/data/entities/post_entity.dart';
 import 'package:bloc_clean_architect/src/features/post/domain/models/post_model.dart';
@@ -12,9 +13,9 @@ class PostRepository extends IPostRepository {
   PostRepository(this._postApi);
 
   @override
-  Future<List<PostModel>> getPosts() async {
+  Future<List<PostModel>> getPosts(PostListParams params) async {
     try {
-      final response = await _postApi.getPosts();
+      final response = await _postApi.getPosts(params);
       final posts =
           (response.data as List).map((e) => PostEntity.fromJson(e)).toList();
       return posts;
