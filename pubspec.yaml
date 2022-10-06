@@ -45,6 +45,11 @@ dependencies:
   stream_transform: ^2.0.0
   bloc_concurrency: ^0.2.0
 
+  authentication_repository:
+    path: packages/authentication_repository
+  user_repository:
+    path: packages/user_repository
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

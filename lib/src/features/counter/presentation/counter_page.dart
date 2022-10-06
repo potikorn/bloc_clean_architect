@@ -48,16 +48,19 @@ class _BodyCounterPageState extends State<_BodyCounterPage>
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: const Key('increase'),
             onPressed: () => context.read<CounterCubit>().increment(),
             child: const Icon(Icons.add),
           ),
           const SizedBox(height: 8.0),
           FloatingActionButton(
+            heroTag: const Key('decrease'),
             onPressed: () => context.read<CounterCubit>().decrement(),
             child: const Icon(Icons.remove),
           ),
           const SizedBox(height: 8.0),
           FloatingActionButton(
+            heroTag: const Key('save'),
             onPressed: () => context.read<CounterCubit>().saveToDisk(),
             child: const Icon(Icons.save),
           )
