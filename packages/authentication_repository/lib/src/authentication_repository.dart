@@ -15,10 +15,13 @@ class AuthenticationRepository {
     required String username,
     required String password,
   }) async {
-    await Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _controller.add(AuthenticationStatus.authenticated),
-    );
+    // FIXME post authentication to server
+    if (username == 'a@a.com' && password == '1234') {
+      await Future.delayed(
+        const Duration(milliseconds: 300),
+        () => _controller.add(AuthenticationStatus.authenticated),
+      );
+    }
   }
 
   void logout() {
