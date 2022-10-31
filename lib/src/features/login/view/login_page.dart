@@ -32,10 +32,12 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   late final TextEditingController usernameTextController;
-
   late final TextEditingController passwordTextController;
-
   late final LoginController loginController;
+
+  final loginFormKey = GlobalKey<FormState>();
+  final userNameKey = const Key('loginForm_usernameInput_textField');
+  final passwordKey = const Key('loginForm_passwordInput_textField');
 
   @override
   void initState() {
@@ -60,42 +62,69 @@ class _LoginFormState extends State<LoginForm> {
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                key: const Key('loginForm_usernameInput_textField'),
-                controller: usernameTextController,
-                decoration: const InputDecoration(
-                  labelText: 'username',
-                ),
-              ),
-              TextField(
-                key: const Key('loginForm_passwordInput_textField'),
-                controller: passwordTextController,
-                decoration: const InputDecoration(
-                  labelText: 'password',
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    loginController.onSubmitted(
-                      username: usernameTextController.text,
-                      password: passwordTextController.text,
-                    );
-                    Navigator.pushAndRemoveUntil<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => const HomePage()),
-                      (route) => false,
-                    );
+          child: Form(
+            key: loginFormKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  key: userNameKey,
+                  controller: usernameTextController,
+                  decoration: const InputDecoration(
+                    labelText: 'username',
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'required';
+                    }
                   },
-                  child: const Text('Login'),
                 ),
-              )
-            ],
+                TextFormField(
+                  key: passwordKey,
+                  controller: passwordTextController,
+                  decoration: const InputDecoration(
+                    labelText: 'password',
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'required';
+                    }
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (!(loginFormKey.currentState?.validate() ?? false)) {
+                        return;
+                      }
+                      final result = await loginController.onSubmitted(
+                        username: usernameTextController.text,
+                        password: passwordTextController.text,
+                      );
+                      if (result && mounted) {
+                        Navigator.pushAndRemoveUntil<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const HomePage()),
+                          (route) => false,
+                        );
+                      } else {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('invalid credentials')));
+                        }
+                      }
+                    },
+                    child: const Text('Login'),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },

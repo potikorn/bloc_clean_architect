@@ -24,7 +24,7 @@ class LoginController {
       return true;
     } catch (_) {
       log('error login');
+      return false;
     }
-    return false;
   }
 }
